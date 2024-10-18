@@ -14,7 +14,12 @@ const OTPComponent = () => {
   const isMobileNumberValid = /^[6-9]\d{9}$/.test(mobileNumber); // Simple validation for a 10-digit mobile number
   const isOtpValid = /^\d{4,6}$/.test(otp); // Valid OTP is typically 4-6 digits
 
+
+
+
+  // sendMobile Number
   const handleSendOtp = async () => {
+    
     if (!isMobileNumberValid) {
       setErrorMessage('Please enter a valid 10-digit mobile number.');
       return;
@@ -22,14 +27,14 @@ const OTPComponent = () => {
 
     setIsSubmitting(true);
     try {
-      // Send mobileNumber to backend to trigger OTP
-    //   const response = await fetch('http://localhost:8080/api/send-otp', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ mobileNumber }),
-    //   });
+   
+      const response = await fetch(`http://localhost:8080/api/otp/sendByNumber?number=${mobileNumber}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ mobileNumber }),
+      });
       if (true) {
         setIsOtpSent(true);
         setErrorMessage(''); // Clear any previous errors
@@ -43,6 +48,11 @@ const OTPComponent = () => {
     }
   };
 
+
+
+
+
+// verify OTP
   const handleVerifyOtp = async () => {
     if (!isOtpValid) {
       setErrorMessage('Please enter a valid OTP.');
@@ -52,19 +62,25 @@ const OTPComponent = () => {
     setIsSubmitting(true);
     try {
       // Send OTP and mobile number to backend to verify
-    //   const response = await fetch('http://localhost:8080/api/verify-otp', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ mobileNumber, otp }),
-    //   });
-    //   const result = await response.json();
+      const response = await fetch(`http://localhost:8080/api/otp/verifiedOtp?number=${mobileNumber}&otp=${otp}`, {
+        method: 'GET', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+          // Parse and log the response data
+    const result = await response.json();
+    console.log('Parsed response data from verifyOtp Api.......:', result);
 
 
-    //   if (response.ok && result.valid)
-        if(true) {
+      console.log("Resonse of verifyOtp Api ............"+response)
 
+console.log("Resonse of verifyOtp Api ............"+response.data)
+
+      if (result.message === 'success'  && !result.hasError )
+       {
+        console.log("OTP Verified, redirecting to userform...");
+console.log("Response checked from verifyOtp API and redirect to userform.........")
         navigate('/userform');
 
       } else {

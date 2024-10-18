@@ -534,6 +534,8 @@ import {
 } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const UserFormComponent = () => {
@@ -563,9 +565,9 @@ const UserFormComponent = () => {
   });
   const [file, setFile] = useState(null);
   const [qualification, setQualification] = useState({
-    level: '',
-    boardOrUniversity: '',
-    yearOfPassing: '',
+    standard: '',
+    university: '',
+    passingYear: '',
     percentage: '',
   });
   const [address, setAddress] = useState({
@@ -579,7 +581,7 @@ const UserFormComponent = () => {
 
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const navigate = useNavigate(); 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -601,7 +603,7 @@ const UserFormComponent = () => {
       ...prev,
       qualifications: [...prev.qualifications, qualification],
     }));
-    setQualification({ level: '', boardOrUniversity: '', yearOfPassing: '', percentage: '' });
+    setQualification({ standard: '', university: '', passingYear: '', percentage: '' });
   };
 
   const removeQualification = (index) => {
@@ -614,29 +616,7 @@ const UserFormComponent = () => {
 
 
 
-  // const handleAddressChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setAddress((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
-  // const addAddress = () => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     addresses: [...prev.addresses, address],
-  //   }));
-  //   setAddress({ streetAddress: '', taluka: '', district: '', state: '', pincode: '' });
-  // };
-
-  // const removeAddress = (index) => {
-  //   const updatedAddresses = formData.addresses.filter((_, i) => i !== index);
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     addresses: updatedAddresses,
-  //   }));
-  // };
-
+ 
 
 
   const handleAddressChange = (e) => {
@@ -658,13 +638,7 @@ const UserFormComponent = () => {
     setAddress({ streetAddress: '', taluka: '', district: '', state: '', pincode: '' });
   };
 
-  // const addQualification = () => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     qualifications: [...prev.qualifications, qualification],
-  //   }));
-  //   setQualification({ level: '', boardOrUniversity: '', yearOfPassing: '', percentage: '' });
-  // };
+ 
   const removeAddress = (index) => {
     const updatedAddresses = formData.addresses.filter((_, i) => i !== index);
     setFormData((prev) => ({
@@ -802,6 +776,19 @@ const UserFormComponent = () => {
           }
         });
   
+        const result =  response.data
+        console.log('Parsed response data from /user/form/save Api.......:', result);
+    
+    
+    
+
+        if (result.message ==='Application Added' && !result.hasError ) {
+          
+          const applicationId = result.object.applicationId; // or wherever it's located in the response
+      
+          // Now navigate to the payment component with the applicationId
+          navigate('/payment', { state: { applicationId } });
+        }
         // Handle success response
         console.log('Application saved successfully:', response.data);
         alert('Application saved successfully!');
@@ -830,7 +817,7 @@ const UserFormComponent = () => {
       p={4}
       overflowY="auto"
     >
-      <Box p={6} shadow="md" borderWidth="1px" borderRadius="lg" maxWidth="700px" width="100%" bg="white">
+      <Box p={4} shadow="md" borderWidth="1px" borderRadius="lg"  maxWidth="90vw"   maxHeight="90vh" width="100%" bg="white">
         <form onSubmit={handleSubmit}>
           <Text fontSize="xl" mb={4} textAlign="center">User Form</Text>
 
@@ -1123,9 +1110,9 @@ const UserFormComponent = () => {
             <Tbody>
               {formData.qualifications.map((qual, index) => (
                 <Tr key={index}>
-                  <Td>{qual.level}</Td>
-                  <Td>{qual.boardOrUniversity}</Td>
-                  <Td>{qual.yearOfPassing}</Td>
+                  <Td>{qual.standard}</Td>
+                  <Td>{qual.university}</Td>
+                  <Td>{qual.passingYear}</Td>
                   <Td>{qual.percentage}</Td>
                   <Td>
                     <IconButton

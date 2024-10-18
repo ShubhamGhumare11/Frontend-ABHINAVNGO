@@ -37,10 +37,14 @@ import { Flex, Box } from '@chakra-ui/react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import OTP from "./component/Otp";
 import Payment from "./component/Payment";
+import ThankYou from "./component/ThankYou";
+
 import FormManagment from "./component/FormManagment";
 
 
 import UserForm from "./component/Userform";
+
+
 
 import Login from "./component/login";
 import SignUp from "./component/SignUp";
@@ -67,7 +71,7 @@ function App() {
           element={
             <>
            <OTP/>
-           {/* <Payment/> */}
+         
 
            {/* <FormManagment/> */}
             </>
@@ -75,7 +79,8 @@ function App() {
         />
 
 <Route path="/userform" element={<UserForm />} />
-
+<Route path="/payment" element={<Payment />} />
+<Route path="/processCompleted" element={<ThankYou/>} />
      
 <Route path="/login" element={<Login />} />
 
